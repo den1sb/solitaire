@@ -1,0 +1,114 @@
+body {
+    background-color: #036d5b;
+}
+
+/*
+    absolute
+*/
+#logoCoeur {
+    position: absolute;
+    width: 5%;
+    top: 20px;
+    position: fixed;
+}
+
+#logoCarreau {
+    position: absolute;
+    width: 5%;
+    right: 20px;
+    bottom: 20px;
+    position: fixed;
+}
+
+#logoPique {
+    position: absolute;
+    width: 5%;
+    right: 20px;
+    top: 20px;
+    position: fixed;
+}
+
+#logoTrefle {
+    position: absolute;
+    width: 5%;
+    bottom: 20px;
+    position: fixed;
+}
+
+
+
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    color: whitesmoke;
+    text-transform: uppercase;
+    font-size: 4vw;
+    text-shadow: 2px 2px 2px black;
+}
+
+.row {
+    display: flex;
+}
+
+#top {
+    justify-content: space-around;
+    width: 80%;
+    margin-left: 10%;
+}
+
+#top div {
+    width: 150px;
+    border-radius: 10px;
+}
+
+.invisible{
+    display: none;
+}
+
+#top img {
+    width: 100%;
+}
+
+.fundation {
+    background-color: #359F8D;
+}
+.fundation img{
+    border-radius: 10px;
+}
+
+#hiddenFace {
+    background-color: #359F8D;
+}
+
+#hiddenFace img{
+    border-radius: 10px;
+}
+
+#visibleFace {
+    background-color: #359F8D;
+    position: relative;
+}
+
+#column {
+    margin-top: 30px;
+    justify-content: space-around;
+    width: 80%;
+    margin-left: 10%;
+}
+
+#column div {
+    width: 150px;
+    position: relative;
+    margin-left: 10px;
+}
+
+#column div:last-child {
+    margin-right: 10px;
+}
+
+
+#column img {
+    width: 100%;
+}
