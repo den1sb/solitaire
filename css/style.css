@@ -40,11 +40,11 @@ body {
 
 h1 {
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     color: whitesmoke;
     text-transform: uppercase;
-    font-size: 4vw;
+    font-size: 3vw;
     text-shadow: 2px 2px 2px black;
 }
 
@@ -54,12 +54,12 @@ h1 {
 
 #top {
     justify-content: space-around;
-    width: 80%;
-    margin-left: 10%;
+    width: 50%;
+    margin-left: 25%;
 }
 
 #top div {
-    width: 150px;
+    width: 80px;
     border-radius: 10px;
 }
 
@@ -135,12 +135,12 @@ h1 {
 #column {
     margin-top: 30px;
     justify-content: space-around;
-    width: 80%;
-    margin-left: 10%;
+    width: 50%;
+    margin-left: 25%;
 }
 
 #column div {
-    width: 150px;
+    width: 80px;
     position: relative;
     margin-left: 10px;
 }
