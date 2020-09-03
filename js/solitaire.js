@@ -91,35 +91,10 @@ function randomize(tab) {
 
 
 
-// // Clic sur la pioche (coté gauche : la pile retournée)
-// hiddenFace.addEventListener('click', function (e) {
-//     let coteCarte = document.createElement('img');
-//     console.log(cards[0])
-//     // si l'emplacement deck à son tableau vide, récuperer le contenu du tableau
-//     if (cards.length == 0) {
-//         cards = deck; // le cards(face cachée) récupère le contenu de deck(face visible) lorsque la pioche est vide
-//         coteCarte.src = "image/back.png"; // afficher le verso de la carte pioche
-//         hiddenFace.append(coteCarte);
-//     }
-//     // Dans tous les cas, enlève du cards (versoCarte) pour mettre dans le deck(face visible)
-
-//     coteCarte.src = "image/" + cards[0];
-//     coteCarte.style.position = "absolute";
-//     coteCarte.classList.add('visible_card')
-//     coteCarte.setAttribute('draggable', true);
-//     giveClass(coteCarte);
-//     deck.push(cards[0]); // transferer avant de supprimer!!!
-//     cards.splice(0, 1);
-//     visibleFace.append(coteCarte);
-// });
-
-
-
 
 // Clic sur la pioche (coté gauche : la pile retournée)
 hiddenFace.addEventListener('click', function (e) {
     let coteCarte = document.createElement('img');
-    console.log(deck)
     // si l'emplacement deck a son tableau vide, récuperer le contenu du tableau
     if (cards.length === 0) {
         hiddenFace.firstChild.src = "image/back.png";
@@ -127,8 +102,7 @@ hiddenFace.addEventListener('click', function (e) {
         deck = []
         while (visibleFace.firstChild) {
             visibleFace.removeChild(visibleFace.firstChild);
-          }
-        console.log(deck)
+        }
     }
 
     // Dans tous les cas, enlève du cards (versoCarte) pour mettre dans le deck(face visible)
@@ -138,11 +112,11 @@ hiddenFace.addEventListener('click', function (e) {
     coteCarte.style.position = "absolute";
     giveClass(coteCarte);
     deck.push(cards[0]); // transferer avant de supprimer!!!
-    
-        if (cards.length === 1) {
-            hiddenFace.firstChild.src = "image/fundation.png";
-        }
-        cards.splice(0, 1);
+
+    if (cards.length === 1) {
+        hiddenFace.firstChild.src = "image/fundation.png";
+    }
+    cards.splice(0, 1);
     visibleFace.append(coteCarte);
 
 });
@@ -204,6 +178,9 @@ function doubleClic() {
     })
 }
 
+// Stockage de l'élément qui bouge
+let draggedElement;
+
 // Récupère toutes les images (même celles de la pioche, il faut empêcher ça)
 let images = document.querySelectorAll("img");
 
@@ -211,32 +188,60 @@ let images = document.querySelectorAll("img");
 let columnDroppers = document.querySelectorAll(".dropper");
 
 // Sélectionne les fondations/piles
-let foundations = document.querySelectorAll(".foundation");
+let foundations = document.querySelectorAll(".fundation");
 
-// Stockage de l'élément qui bouge
-let draggedElement;
+// Stockage du dropper survolé pour décaler ou non l'image de celles au dessus
+let enteredDropper;
+
+// Boucle sur toutes les images
+for (let image of images) {
+    if (image.draggable === true) {
+        image.addEventListener("dragstart", dragStart);
+        image.addEventListener("dragend", dragEnd);
+    }
+}
 
 
+
+// Fonction appelée dès qu'on bouge une image
+function dragStart() {
+    setTimeout(() => (this.style.display = 'none'), 0);
+    // Correspond à la carte qu'on bouge
+    draggedElement = this;
+
+
+    if (draggedElement.classList.contains("visible_card")) {
+        for (let columnDropper of columnDroppers) {
+            columnDropper.addEventListener('dragover', dragOver);
+            columnDropper.addEventListener('dragenter', dragEnter);
+            columnDropper.addEventListener('dragleave', dragLeave);
+            columnDropper.addEventListener('drop', dragDrop);
+        }
+        for (let foundation of foundations) {
+            foundation.addEventListener('dragover', dragOver);
+            foundation.addEventListener('dragenter', dragEnter);
+            foundation.addEventListener('dragleave', dragLeave);
+            foundation.addEventListener('drop', dragDrop);
+        }
+    }
+}
+
+// Fonction appelée à chaque fois qu'on survole une colonne ou une pile
 function dragOver(e) {
     e.preventDefault();
 }
 
+// Appelée quand on survole une colonne ou une pile
 function dragEnter(e) {
     e.preventDefault();
-    // let lastCard = this.childNodes[this.childNodes.length - 1].getAttribute('src');
-    // let numberChild = lastCard.substring(lastCard.indexOf('/')+1, lastCard.indexOf('_'))
-    // let colorChild = lastCard.substring(lastCard.indexOf('_')+1, lastCard.indexOf('.'))
-
-    // let numberCard = draggedElement.getAttribute('src').substring(draggedElement.getAttribute('src').indexOf('/')+1, draggedElement.getAttribute('src').indexOf('_'))
-    // let colorCard = draggedElement.getAttribute('src').substring(draggedElement.getAttribute('src').indexOf('_')+1, draggedElement.getAttribute('src').indexOf('.'))
+    // Correspond à la colonne ou la pile survolée
+    enteredDropper = this;
 }
 
-function dragLeave() {
+function dragLeave() {}
 
-}
-
+// Quand on relâche la carte
 function dragDrop() {
-
 
 
     let lastChild = this.childNodes[this.childNodes.length - 1]
@@ -274,34 +279,42 @@ function dragDrop() {
 
 
 
-}
+    // Récupérer les numéros des cartes dans l'attribut src déjà dans la pile 
+    //let numberCard = parseInt(draggedElement.getAttribute('src').substring(draggedElement.getAttribute('src').indexOf('/') + 1, draggedElement.getAttribute('src').indexOf('_')));
+    enteredDropper.childNodes.forEach(card => {
+        let cardAlreadyInserted = parseInt(card.getAttribute('src').substring(card.getAttribute('src').indexOf('/') + 1, card.getAttribute('src').indexOf('_')));
+        if (cardAlreadyInserted !== 1 && numberCard === 1) {
+            enteredDropper.append(draggedElement);
+        } else if (cardAlreadyInserted !== 2 && numberCard === 2) {
 
-for (let image of images) {
-    image.addEventListener("dragstart", dragStart);
-    image.addEventListener("dragend", dragEnd);
-}
+        }
+    });
+    //if (enteredDropper.childNodes.classList.contains)
+    if (enteredDropper.className === "dropper") {
+        draggedElement.style.marginTop = this.childNodes.length * 50 -50 + "px";
+        enteredDropper.append(draggedElement);
+    } else {
+        // Vérifier si la carte est dans la bonne pile
+        let dropperId = enteredDropper.getAttribute("id");
 
-function dragStart() {
-    setTimeout(() => (this.style.display = 'none'), 0);
-    draggedElement = this;
-
-
-    if (draggedElement.classList.contains("visible_card")) {
-
-        for (let columnDropper of columnDroppers) {
-            columnDropper.addEventListener('dragover', dragOver);
-            columnDropper.addEventListener('dragenter', dragEnter);
-            columnDropper.addEventListener('dragleave', dragLeave);
-            columnDropper.addEventListener('drop', dragDrop);
+        //if (!enteredDropper.childNodes.classList.contains("as"+dropperId); 
+        if (draggedElement.classList.contains(dropperId)) {
+            if (lastCard.substring(lastCard.indexOf('/') + 1, lastCard.indexOf('_')) /*=== carte en dessous + 1*/ )
+                enteredDropper.append(draggedElement);
+            draggedElement.style.marginTop = "0px";
+            draggedElement.style.top = "0px";
         }
     }
 
 
+    //this.previousElementSibling.style.position = "relative";
 }
 
+// Fonction appelée à la fin
 function dragEnd() {
     this.style.display = 'block';
 }
+
 
 
 function extraitNombre(str) {
